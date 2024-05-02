@@ -11,6 +11,7 @@ const processImage = async (req, res, next) => {
         const newHeight = 600;
 
         try {
+            sharp.cache(false)
             await sharp(req.file.path)
                 .resize(newWidth, newHeight)
                 .webp({ quality: 80 })
