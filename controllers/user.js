@@ -1,9 +1,18 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+
+const emailRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+
+
 require('dotenv').config();
 
 exports.signup = (req, res, next) => {
+
+    if (!emailRegex.test(req.body.email)) {
+        return res.status(410).json({message:"Email non conforme"})
+    }
+    
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
